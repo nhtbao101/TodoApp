@@ -1,0 +1,33 @@
+.todoForm {
+  margin: auto;
+  text-align: center;
+
+  .form {
+    margin: auto;
+    width: 50%;
+  }
+  .header {
+    text-align: center;
+    margin: auto;
+    font-size: 3rem;
+    color: sandybrown;
+  }
+
+  .formInput {
+    border: 1px solid rgb(172, 167, 167);
+    border-bottom: inset;
+    border-bottom-style: zip($lists: 4px);
+    .ant-input {
+      font-size: 2rem;
+    }
+
+    .ant-form {
+      border: none;
+    }
+  }
+  .todo__list {
+    .listForm {
+      border-bottom: groove;
+    }
+  }
+}

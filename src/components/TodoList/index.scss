@@ -1,0 +1,32 @@
+.listForm {
+  list-style: none;
+
+  img {
+    width: 32px;
+  }
+
+  .added {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem;
+
+    .remove {
+      opacity: 0;
+    }
+  }
+
+  .added:hover {
+    .remove {
+      opacity: 1;
+    }
+  }
+
+  li {
+    font-size: 1.2rem;
+  }
+
+  .todo-complete {
+    text-decoration: line-through;
+    opacity: 0.5;
+  }
+}

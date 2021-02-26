@@ -1,0 +1,11 @@
+.todo__control {
+  display: flex;
+  justify-content: space-between;
+  padding: 2%;
+
+  .todo__action {
+    width: 40%;
+    display: flex;
+    justify-content: space-between;
+  }
+}
