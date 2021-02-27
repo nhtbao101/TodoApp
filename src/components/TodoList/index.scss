@@ -13,16 +13,17 @@
     .remove {
       opacity: 0;
     }
+
+    li {
+      font-size: 1.4rem;
+      font-weight: 500;
+    }
   }
 
   .added:hover {
     .remove {
-      opacity: 1;
+      opacity: 0.5;
     }
-  }
-
-  li {
-    font-size: 1.2rem;
   }
 
   .todo-complete {

@@ -1,12 +1,18 @@
 import React from "react";
-import PropTypes from "prop-types";
+// import PropTypes from "prop-types";
 import "./index.scss";
 import { Button } from "antd";
 
 TodoControl.propTypes = {};
 
 function TodoControl(props) {
-  const { onHandleAll, onHandleActive, onHandleCompleted, count } = props;
+  const {
+    onHandleAll,
+    onHandleActive,
+    onHandleCompleted,
+    count,
+    onHandleClear,
+  } = props;
 
   const handleAll = () => {
     onHandleAll();
@@ -20,7 +26,20 @@ function TodoControl(props) {
     onHandleCompleted();
   };
 
-  console.log("count control", typeof count);
+  const handleClear = () => {
+    onHandleClear();
+  };
+
+  // console.log("count control", typeof count);
+  let local = 1;
+  if (localStorage.getItem("todoList") === null) {
+    local = 0;
+  }
+
+  const classname =
+    local === 0 || count === JSON.parse(localStorage.getItem("todoList")).length
+      ? "todo__clear invisable custom-btn btn-13"
+      : "todo__clear custom-btn btn-13";
 
   return (
     <div className="todo__control">
@@ -28,7 +47,6 @@ function TodoControl(props) {
         {count + " " + (count > 1 ? "items left" : "item left")}
       </div>
       <div className="todo__action">
-        {/* <a href="/">All</a> */}
         <Button type="ghost" onClick={handleAll}>
           All
         </Button>
@@ -39,7 +57,9 @@ function TodoControl(props) {
           Completed
         </Button>
       </div>
-      <div className="todo__clear">Clear Complete</div>
+      <button className={classname} onClick={handleClear}>
+        Clear Complete
+      </button>
     </div>
   );
 }
