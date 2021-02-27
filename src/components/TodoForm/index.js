@@ -16,14 +16,14 @@ function TodoForm(props) {
   const [text, setText] = useState("");
   const [todoList, setTodoList] = useState(list);
 
-  const listLocal = JSON.parse(localStorage.getItem("todoList"));
+  const listLocal = JSON.parse(localStorage.getItem("todoList")) || [];
   const active = listLocal.filter((todo) => todo.isComplete === false);
   const countActive = active.length;
 
-  const completed = listLocal.filter((todo) => todo.isComplete === true);
   const rd = Math.trunc(Math.random() * 1000);
 
   const onAddTodo = (event) => {
+    //add item when press enter
     if (event.key === "Enter") {
       event.preventDefault();
       const newList = [...todoList];
@@ -38,10 +38,13 @@ function TodoForm(props) {
       localStorage.setItem("todoList", JSON.stringify(newList));
     }
   };
+  // console.log("completed", completed);
   const onItemClick = (todo) => (e) => {
     // console.log("todosomething", todo);
     const isComplete = todo.isComplete;
     const index = todoList.indexOf(todo);
+    localStorage.removeItem("todoList");
+    //change isComplete at index
     setTodoList([
       ...todoList.slice(0, index),
       {
@@ -58,26 +61,24 @@ function TodoForm(props) {
       },
       ...todoList.slice(index + 1),
     ];
-    localStorage.removeItem("todoList");
     localStorage.setItem("todoList", JSON.stringify(newList));
   };
-  // console.log("list here", todoList);
 
   const onRemove = (todo) => (e) => {
+    //select index and remove it with slice
     const index = todoList.indexOf(todo);
     const newList = todoList
       .slice(0, index)
       .concat(...todoList.slice(index + 1));
+    localStorage.removeItem("todoList");
+    localStorage.setItem("todoList", JSON.stringify(newList));
     setTodoList([
       ...todoList.slice(0, index).concat(...todoList.slice(index + 1)),
     ]);
-    localStorage.removeItem("todoList");
-    localStorage.setItem("todoList", JSON.stringify(newList));
   };
 
   const onAllClick = () => {
     setTodoList(JSON.parse(localStorage.getItem("todoList")));
-    // console.log(todoList);
   };
 
   const onActiveClick = () => {
@@ -85,12 +86,44 @@ function TodoForm(props) {
   };
 
   const onCompletedClick = () => {
-    const newCompleted = completed;
-    setTodoList(completed);
+    setTodoList(
+      JSON.parse(localStorage.getItem("todoList")).filter(
+        (todo) => todo.isComplete === true
+      )
+    );
   };
 
   const countTodo = () => countActive;
-  console.log("Active = ", countTodo());
+
+  const handleCheckAll = () => {
+    // if check all
+    if (countTodo() === 0) {
+      localStorage.removeItem("todoList");
+      const allList = [...todoList];
+      for (let i of allList) {
+        i.isComplete = false;
+      }
+      setTodoList(allList);
+      localStorage.setItem("todoList", JSON.stringify(allList));
+    } else {
+      //if any check don't check
+      localStorage.removeItem("todoList");
+      const allList = [...todoList];
+      for (let i of allList) {
+        i.isComplete = true;
+      }
+      setTodoList(allList);
+      localStorage.setItem("todoList", JSON.stringify(allList));
+    }
+  };
+
+  const onClearCompleted = () => {
+    // filter completed and remove local
+    const clearList = todoList.filter((clear) => clear.isComplete === false);
+    localStorage.removeItem("todoList");
+    localStorage.setItem("todoList", JSON.stringify(clearList));
+    setTodoList(clearList);
+  };
 
   return (
     <div className="todoForm">
@@ -99,6 +132,8 @@ function TodoForm(props) {
           <div className="header">todos</div>
           <div className="formInput">
             <Form>
+              {/* <div className="checkAll"></div> */}
+
               <Input
                 name="text"
                 size="large"
@@ -106,13 +141,14 @@ function TodoForm(props) {
                 prefix={
                   <img
                     src={Images.arrowndown}
-                    style={{ width: 32, padding: 5 }}
+                    style={{ width: 32, padding: 4 }}
                     onClick={handleCheckAll}
                   ></img>
                 }
                 value={text}
                 onChange={(e) => setText(e.target.value)}
                 onKeyPress={onAddTodo}
+                className="input__text"
               />
             </Form>
             <div className="todo__list">
@@ -130,6 +166,7 @@ function TodoForm(props) {
               onHandleAll={onAllClick}
               onHandleActive={onActiveClick}
               onHandleCompleted={onCompletedClick}
+              onHandleClear={onClearCompleted}
             />
           </div>
         </Col>
